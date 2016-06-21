@@ -30,6 +30,7 @@ print "## Sum of 2 polynomials"
 print "Polynomial object with coefficients of %s and exponent of %d is equal to" % (PolyC.coefs, PolyC.exponent) 
 print "(%s)(%s) which is also equal to" % (poly.poly(PolyC.coefs), poly.poly([1], PolyC.exponent)) 
 print PolyC
+print
 
 PolyC = PolyA * PolyB
 PolyC.clean()

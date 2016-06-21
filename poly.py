@@ -7,7 +7,7 @@ def trim(arr, x=0):
 	return a
 
 class poly:
-	def __init__(self, coefs, exponent=0):
+	def __init__(self, coefs=[], exponent=0):
 		self.coefs = coefs
 		self.exponent = exponent
 

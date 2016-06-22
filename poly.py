@@ -1,3 +1,5 @@
+import math
+
 def trim(arr, x=0):
 	a = []
 	for i in xrange(len(arr)):
@@ -49,37 +51,17 @@ class poly:
 
 	def clean(self):
 		self.coefs = trim(self.coefs)
+		if len(self.coefs) == 0:
+			return self
 		while self.coefs[len(self.coefs)-1] == 0:
 			self.coefs.pop()
 			self.exponent += 1
+			if len(self.coefs) == 0:
+				return self
 		return self
 
 	def __add__(self, other):
-		if type(other) == int:
-			other = poly([other])
-		a, b = self, other
-		diff = b.exponent - a.exponent
-		if diff > 0:
-			b.exponent = a.exponent
-			b.coefs += diff * [0]
-		else:
-			a.exponent = b.exponent
-			a.coefs += diff * [0]
-
-		diff = len(b.coefs) - len(a.coefs)
-		if diff > 0:
-			a.coefs = diff * [0] + a.coefs
-		else:
-			b.coefs = diff * [0] + b.coefs
-
-		coefs = []
-		for i in xrange(len(a.coefs)):
-			coefs.append(a.coefs[i] + b.coefs[i])
-
-		return poly(coefs, a.exponent).clean()
-
-	def __sub__(self, other):
-		if type(other) == int:
+		if type(other) in [int, float]:
 			other = poly([other])
 		a, b = self, other
 		diff = b.exponent - a.exponent
@@ -94,7 +76,31 @@ class poly:
 		if diff > 0:
 			a.coefs = diff * [0] + a.coefs
 		else:
-			b.coefs = diff * [0] + b.coefs
+			b.coefs = -diff * [0] + b.coefs
+
+		coefs = []
+		for i in xrange(len(a.coefs)):
+			coefs.append(a.coefs[i] + b.coefs[i])
+
+		return poly(coefs, a.exponent).clean()
+
+	def __sub__(self, other):
+		if type(other) in [int, float]:
+			other = poly([other])
+		a, b = self, other
+		diff = b.exponent - a.exponent
+		if diff > 0:
+			b.exponent = a.exponent
+			b.coefs += diff * [0]
+		else:
+			a.exponent = b.exponent
+			a.coefs += -diff * [0]
+
+		diff = len(b.coefs) - len(a.coefs)
+		if diff > 0:
+			a.coefs = diff * [0] + a.coefs
+		else:
+			b.coefs = -diff * [0] + b.coefs
 
 		coefs = []
 		for i in xrange(len(a.coefs)):
@@ -103,7 +109,7 @@ class poly:
 		return poly(coefs, a.exponent).clean()
 
 	def __mul__(self, other):
-		if type(other) == int:
+		if type(other) in [int, float]:
 			other = poly([other])
 		coefs = []
 		for i in range(len(self.coefs)):
@@ -116,9 +122,9 @@ class poly:
 		return poly(coefs, expo).clean()
 
 	def __div__(self, other):
-		if type(other) == int:
+		if type(other) in [int, float]:
 			other = poly([other])
-		a, b, coefs = trim(self.coefs), trim(other.coefs), []
+		a, b = trim(self.coefs), trim(other.coefs)
 
 		diff = other.exponent - self.exponent
 		expo = 0
@@ -130,9 +136,11 @@ class poly:
 			diff = -diff
 			a += diff * [0]
 
+		coefs = [0] * (len(a) - len(b) + 1)
+
 		for i in xrange(len(a)):
 			n = float(a[i]) / b[0]
-			coefs.append(n)
+			coefs[i] = n
 			a[i] = 0
 
 			for j in xrange(1, len(b)):
@@ -143,7 +151,7 @@ class poly:
 		return poly(trim(coefs), diff).clean()
 
 	def __mod__(self, other):
-		if type(other) == int:
+		if type(other) in [int, float]:
 			other = poly([other])
 		a, b, coefs = trim(self.coefs), trim(other.coefs), []
 
@@ -194,12 +202,13 @@ class poly:
 
 	@staticmethod
 	def interpolate(points):
-		a = poly([])
+		a = poly([0])
 		for i in range(len(points)):
 			temp = poly([1])
 			for j in range(len(points)):
 				if j == i:
 					continue
+
 				temp *= poly([1, -points[j][0]]) / (points[i][0] - points[j][0])
 			a += temp * points[i][1]
 		return a.clean()

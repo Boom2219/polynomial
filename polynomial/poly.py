@@ -1,5 +1,3 @@
-import math
-
 def trim(arr, x=0):
 	a = []
 	for i in xrange(len(arr)):
@@ -201,7 +199,7 @@ class poly:
 		return poly(coefs, expo).clean()
 
 	@staticmethod
-	def interpolate(points):
+	def interpolate(*points):
 		a = poly([0])
 		for i in range(len(points)):
 			temp = poly([1])
@@ -212,3 +210,10 @@ class poly:
 				temp *= poly([1, -points[j][0]]) / (points[i][0] - points[j][0])
 			a += temp * points[i][1]
 		return a.clean()
+
+a = poly([1, 0, -16])
+b = poly([1, -4])
+
+print "%s divided by %s is " %(a, b)
+print a/b
+print "with remainded %s" % (a % b)

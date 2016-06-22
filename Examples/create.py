@@ -1,4 +1,4 @@
-import poly
+from polynomial import poly
 
 ## Initialisation of polynomials
 

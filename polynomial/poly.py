@@ -7,7 +7,10 @@ def trim(arr, x=0):
 	return a
 
 class poly:
-	def __init__(self, coefs=[], exponent=0):
+	def __init__(self, coefs=[], exponent=0, char="x"):
+		self.char = char
+		if type(coefs) in [int, float]:
+			coefs = [coefs]
 		self.coefs = coefs
 		self.exponent = exponent
 
@@ -31,7 +34,7 @@ class poly:
 				if term == "" or term == "-":
 					term += "1"
 			else:
-				term += "x"
+				term += self.char
 				if power != 1:
 					term += "^%d" % power
 
@@ -60,7 +63,9 @@ class poly:
 
 	def __add__(self, other):
 		if type(other) in [int, float]:
-			other = poly([other])
+			other = poly(other)
+		elif type(self) in [int, float]:
+			self = poly(self)
 		a, b = self, other
 		diff = b.exponent - a.exponent
 		if diff > 0:
@@ -84,7 +89,9 @@ class poly:
 
 	def __sub__(self, other):
 		if type(other) in [int, float]:
-			other = poly([other])
+			other = poly(other)
+		elif type(self) in [int, float]:
+			self = poly(self)
 		a, b = self, other
 		diff = b.exponent - a.exponent
 		if diff > 0:
@@ -108,7 +115,9 @@ class poly:
 
 	def __mul__(self, other):
 		if type(other) in [int, float]:
-			other = poly([other])
+			other = poly(other)
+		elif type(self) in [int, float]:
+			self = poly(self)
 		coefs = []
 		for i in range(len(self.coefs)):
 			for j in range(len(other.coefs)):
@@ -121,7 +130,9 @@ class poly:
 
 	def __div__(self, other):
 		if type(other) in [int, float]:
-			other = poly([other])
+			other = poly(other)
+		elif type(self) in [int, float]:
+			self = poly(self)
 		a, b = trim(self.coefs), trim(other.coefs)
 
 		diff = other.exponent - self.exponent
@@ -150,7 +161,9 @@ class poly:
 
 	def __mod__(self, other):
 		if type(other) in [int, float]:
-			other = poly([other])
+			other = poly(other)
+		elif type(self) in [int, float]:
+			self = poly(self)
 		a, b, coefs = trim(self.coefs), trim(other.coefs), []
 
 		diff = other.exponent - self.exponent
@@ -200,9 +213,9 @@ class poly:
 
 	@staticmethod
 	def interpolate(*points):
-		a = poly([0])
+		a = poly()
 		for i in range(len(points)):
-			temp = poly([1])
+			temp = poly(1)
 			for j in range(len(points)):
 				if j == i:
 					continue
@@ -213,3 +226,11 @@ class poly:
 
 	def get_roots(self):
 		return 0
+
+	def plot(self, against="y"):
+		string = str(self)
+		string.
+
+
+## y = 1.9e-19x^12 + 2.6e-6x^11 - 0.0002x^10
+## y=1.9e{-19}x^{12}+2.6e{-6}x^{11}-0.0002x^{10}

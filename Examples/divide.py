@@ -1,9 +1,9 @@
 from polynomial import poly
 
-PolyA = poly.poly([1, 0, 16])
+PolyA = poly([1, 0, 16])
 ## x^2 + 16
 
-PolyB = poly.poly([1, -4])
+PolyB = poly([1, -4])
 ## x - 4
 
 quotient = PolyA / PolyB # x + 4

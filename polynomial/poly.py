@@ -211,9 +211,5 @@ class poly:
 			a += temp * points[i][1]
 		return a.clean()
 
-a = poly([1, 0, -16])
-b = poly([1, -4])
-
-print "%s divided by %s is " %(a, b)
-print a/b
-print "with remainded %s" % (a % b)
+	def get_roots(self):
+		return 0
